@@ -18,9 +18,6 @@ public class TravelYandexTrainsPage extends AbstractPage
     @FindBy(xpath = "//form[@class='RhypN XSMNz yIzkO Ks4Vt DE0Wm YHMga hgH6Z']//div[text()='Куда']/..//input")
     private WebElement toInput;
 
-    //@FindBy(xpath = "//form[@class='RhypN XSMNz yIzkO Ks4Vt DE0Wm YHMga hgH6Z']//div[@class='PlEcb rxg0f DZYJw oqF0g']/label/button")
-    //private WebElement dateInput;
-
     @FindBy(xpath = "//form[@class='RhypN XSMNz yIzkO Ks4Vt DE0Wm YHMga hgH6Z']/button[@class='vHqxX z8gtM']")
     private WebElement findButton;
 
@@ -63,12 +60,12 @@ public class TravelYandexTrainsPage extends AbstractPage
 
     public String getSourceAndDestination()
     {
-        return getElement("//header//div[@class='WFYfN']/span").getText();
+        return getElement("//header//div[@class='WFYfN']/span[@class='text']").getText();
     }
 
     public String getDateString()
     {
-        return getElement("//header//div[@class='kzvZe']/span").getText();
+        return getElement("//header//div[@class='kzvZe']/span[@class='ZlSD1']").getText();
     }
 
 

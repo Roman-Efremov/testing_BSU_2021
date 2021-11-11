@@ -17,7 +17,9 @@ public class TravelYandexTrainsPageTests
     public void browserSetup()
     {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
+        options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1920,1080",
+                "--disable-extensions", "--proxy-server='direct://'", "--proxy-bypass-list=*", "--start-maximized",
+                "--disable-gpu", "--ignore-certificate-errors");
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
     }
@@ -34,10 +36,11 @@ public class TravelYandexTrainsPageTests
                 .enterFrom(source)
                 .enterTo(destination)
                 .submit();
+        String sandd = trainsPage.getSourceAndDestination();
 
         Assert.assertTrue(
-                trainsPage.getSourceAndDestination().contains(source)
-                        && trainsPage.getSourceAndDestination().contains(destination)
+                sandd.contains(source)
+                        && sandd.contains(destination)
                         && trainsPage.getDateString().equals(date));
     }
 
