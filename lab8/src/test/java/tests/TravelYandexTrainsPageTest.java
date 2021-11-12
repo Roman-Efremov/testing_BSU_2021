@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import page.TravelYandexTrainsPage;
 
-public class TravelYandexTrainsPageTests
+public class TravelYandexTrainsPageTest
 {
     private WebDriver driver;
 
