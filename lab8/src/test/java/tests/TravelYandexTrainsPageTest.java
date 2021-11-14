@@ -36,11 +36,11 @@ public class TravelYandexTrainsPageTest
                 .enterFrom(source)
                 .enterTo(destination)
                 .submit();
-        String sandd = trainsPage.getSourceAndDestination();
+        String sourceAndDestination = trainsPage.getSourceAndDestination();
 
         Assert.assertTrue(
-                sandd.contains(source)
-                        && sandd.contains(destination)
+                sourceAndDestination.contains(source)
+                        && sourceAndDestination.contains(destination)
                         && trainsPage.getDateString().equals(date));
     }
 
