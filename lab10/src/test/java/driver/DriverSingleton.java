@@ -25,7 +25,7 @@ public class DriverSingleton {
                     options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1920,1080",
                             "--disable-extensions", "--proxy-server='direct://'", "--proxy-bypass-list=*", "--start-maximized",
                             "--disable-gpu", "--ignore-certificate-errors");
-                    WebDriverManager.chromedriver().browserVersion("90").setup();
+                    WebDriverManager.chromedriver().version("").setup();
                     driver = new ChromeDriver(options);
                 }
             }
