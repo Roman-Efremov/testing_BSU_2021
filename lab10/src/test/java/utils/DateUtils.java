@@ -25,11 +25,4 @@ public class DateUtils {
         calendar.add(Calendar.DAY_OF_YEAR, numberOfDays);
         return calendar.getTime();
     }
-
-    public static void main(String[] args) {
-        Date d = getCurrentDate();
-        Calendar c = Calendar.getInstance();
-        c.setTime(d);
-        System.out.println(capitalize(StringUtils.chop(formatDateToRussian(c.getTime(), "dd MMM"))));
-    }
 }
