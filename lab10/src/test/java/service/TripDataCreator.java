@@ -14,7 +14,6 @@ public class TripDataCreator {
     public static String TESTDATA_AVIA_DESTINATION = "testdata.avia.destination";
     public static String TESTDATA_HOTEL_DESTINATION = "testdata.hotel.destination";
 
-
     public static TripData aviaWithDataFromProperty() {
         Date currentDate = getCurrentDate();
         Date nextDate = getNextDate(currentDate, 1);

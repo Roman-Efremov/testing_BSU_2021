@@ -1,13 +1,13 @@
 package tests;
 
 import model.TripData;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import page.TravelYandexTrainPage;
 import service.TestDataReader;
 import service.TripDataCreator;
 
-import static org.testng.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class TravelYandexTrainPageTest extends CommonConditions {
 
@@ -25,9 +25,9 @@ public class TravelYandexTrainPageTest extends CommonConditions {
                 .submit();
         String sourceAndDestination = trainsPage.getSourceAndDestination();
 
-        assertTrue(sourceAndDestination.contains(tripData.getSource())
-                        && sourceAndDestination.contains(tripData.getDestination())
-                        && trainsPage.getTravelDate().equals(expectedDate));
+        assertThat(sourceAndDestination, containsString(tripData.getSource()));
+        assertThat(sourceAndDestination, containsString(tripData.getDestination()));
+        assertThat(trainsPage.getTravelDate(), is(equalTo(expectedDate)));
     }
 
     @Test
@@ -40,6 +40,6 @@ public class TravelYandexTrainPageTest extends CommonConditions {
                 .submit()
                 .isDestinationEmpty();
 
-        assertTrue(isDestinationEmpty, "destination is not empty");
+        assertThat(isDestinationEmpty, equalTo(true));
     }
 }

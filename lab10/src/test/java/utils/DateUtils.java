@@ -1,13 +1,12 @@
 package utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.chop;
+
 
 public class DateUtils {
 
@@ -28,8 +27,6 @@ public class DateUtils {
 
     public static void main(String[] args) {
         Date d = getCurrentDate();
-        Calendar c = Calendar.getInstance();
-        c.setTime(d);
-        System.out.println(capitalize(StringUtils.chop(formatDateToRussian(c.getTime(), "dd MMM"))));
+        System.out.println(chop(formatDateToRussian(d, "dd MMM")));
     }
 }

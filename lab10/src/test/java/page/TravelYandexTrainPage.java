@@ -13,13 +13,21 @@ public class TravelYandexTrainPage extends AbstractPage {
 
     public static String PAGE_URL = "https://travel.yandex.ru/trains/";
 
-    @FindBy(xpath = "//div[@class='root GSMZw']/form//div[text()='Откуда']/..//input")
+    private static final String SOURCE_INPUT_XPATH = "//div[@class='root GSMZw']/form//div[text()='Откуда']/..//input";
+    private static final String DESTINATION_INPUT_XPATH = "//div[@class='root GSMZw']/form//div[text()='Куда']/..//input";
+    private static final String FIND_BUTTON_XPATH = "//div[@class='root GSMZw']/form/button[@class='vHqxX z8gtM']";
+    private static final String SOURCE_AND_DESTINATION_XPATH = "//header//div[@class='WFYfN']/span[@class='text']";
+    private static final String TRAVEL_DATE_XPATH = "//header//div[@class='kzvZe']/span[@class='ZlSD1']";
+    private static final String DESTINATION_XPATH = "//div[@class='root GSMZw']/form//div[text()='Куда']/../div[@class='nAZcZ LRlEo' and text()='Куда']";
+    private static final String TRAVEL_LIST_NAME_XPATH = "//*[@class='EW8x1']//div[text()='%1$s']";
+
+    @FindBy(xpath = SOURCE_INPUT_XPATH)
     private WebElement sourceInput;
 
-    @FindBy(xpath = "//div[@class='root GSMZw']/form//div[text()='Куда']/..//input")
+    @FindBy(xpath = DESTINATION_INPUT_XPATH)
     private WebElement destinationInput;
 
-    @FindBy(xpath = "//div[@class='root GSMZw']/form/button[@class='vHqxX z8gtM']")
+    @FindBy(xpath = FIND_BUTTON_XPATH)
     private WebElement findButton;
 
     public TravelYandexTrainPage(WebDriver driver) {
@@ -52,26 +60,25 @@ public class TravelYandexTrainPage extends AbstractPage {
     }
 
     public String getSourceAndDestination() {
-        return getElement("//header//div[@class='WFYfN']/span[@class='text']").getText();
+        return getElement(SOURCE_AND_DESTINATION_XPATH).getText();
     }
 
     public String getTravelDate() {
-        return getElement("//header//div[@class='kzvZe']/span[@class='ZlSD1']").getText();
+        return getElement(TRAVEL_DATE_XPATH).getText();
     }
 
     public boolean isDestinationEmpty() {
-        return getElement("//div[@class='root GSMZw']/form//div[text()='Куда']/../div[@class='nAZcZ LRlEo' and text()='Куда']")
-                .isEnabled();
+        return getElement(DESTINATION_XPATH).isEnabled();
     }
 
     private WebElement getMatchingListElement(String name) {
-        By elementWithNameLocator = By.xpath("//*[@class='EW8x1']//div[text()='" + name + "']");
+        By elementWithNameLocator = By.xpath(String.format(TRAVEL_LIST_NAME_XPATH, name));
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.elementToBeClickable(elementWithNameLocator));
     }
 
-    private WebElement getElement(String xpath) {
-        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-    }
+//    private WebElement getElement(String xpath) {
+//        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
+//                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+//    }
 }

@@ -22,16 +22,25 @@ public class TravelYandexHotelPage extends AbstractPage {
 
     public static String PAGE_URL = "https://travel.yandex.ru/hotels/";
 
-    @FindBy(xpath = "//div[@class='root cjvMw']//form//div[text()[contains(.,'Куда')]]/..//input")
+    private static final String DESTINATION_INPUT_XPATH = "//div[@class='root cjvMw']//form//div[text()[contains(.,'Куда')]]/..//input";
+    private static final String DATE_TO_XPATH = "//div[@class='root cjvMw']//form//div[text()='Заезд']";
+    private static final String DATE_FROM_XPATH = "//div[@class='root cjvMw']//form//div[text()='Выезд']";
+    private static final String FIND_BUTTON_XPATH = "//div[@class='root cjvMw']//form/button[@class='vHqxX z8gtM']";
+    private static final String FIRST_ADD_TO_FAVORITE_BUTTON_XPATH = "//div[@class='PTAbI']//div[@class='TdBzS root_size_s latzZ']";
+    private static final String FIRST_HOTEL_XPATH = "//div[@class='PTAbI']//div[@class='TdBzS root_size_s latzZ']/..//a";
+    private static final String TRAVEL_LIST_NAME_XPATH = "//*[@class='EW8x1']//div[text()='%1$s']";
+    private static final String TRAVEL_TABLE_DATE_XPATH = "//div[@class='aCtN8']//div[text()='%1$s']/..//span[text()='%2$s']/..";
+
+    @FindBy(xpath = DESTINATION_INPUT_XPATH)
     private WebElement destinationInput;
 
-    @FindBy(xpath = "//div[@class='root cjvMw']//form//div[text()='Заезд']")
+    @FindBy(xpath = DATE_TO_XPATH)
     private WebElement dateTo;
 
-    @FindBy(xpath = "//div[@class='root cjvMw']//form//div[text()='Выезд']")
+    @FindBy(xpath = DATE_FROM_XPATH)
     private WebElement dateFrom;
 
-    @FindBy(xpath = "//div[@class='root cjvMw']//form/button[@class='vHqxX z8gtM']")
+    @FindBy(xpath = FIND_BUTTON_XPATH)
     private WebElement findButton;
 
 
@@ -54,7 +63,7 @@ public class TravelYandexHotelPage extends AbstractPage {
 
     public TravelYandexHotelPage enterDateTo(Date date) {
         String monthTo = capitalize(formatDateToRussian(date, "MMMM"));
-        String dayTo = capitalize(formatDateToRussian(date, "dd"));
+        String dayTo = formatDateToRussian(date, "dd");
         dateTo.click();
         getMatchingTableDate(monthTo, dayTo).click();
         return this;
@@ -62,7 +71,7 @@ public class TravelYandexHotelPage extends AbstractPage {
 
     public TravelYandexHotelPage enterDateFrom(Date date) {
         String monthFrom = capitalize(formatDateToRussian(date, "MMMM"));
-        String dayFrom = capitalize(formatDateToRussian(date, "dd"));
+        String dayFrom = formatDateToRussian(date, "dd");
         dateFrom.click();
         getMatchingTableDate(monthFrom, dayFrom).click();
         return this;
@@ -74,14 +83,14 @@ public class TravelYandexHotelPage extends AbstractPage {
     }
 
     public TravelYandexHotelPage addFirstHotelToFavorite() {
-        getElement("//div[@class='PTAbI']//div[@class='TdBzS root_size_s latzZ']").click();
+        getElement(FIRST_ADD_TO_FAVORITE_BUTTON_XPATH).click();
         logger.info("Add hotel \"" + getFirstHotelName() + "\" to favorite");
         return this;
     }
 
     public boolean isDateFromClickable(Date date) {
         String monthFrom = capitalize(formatDateToRussian(date, "MMMM"));
-        String dayFrom = capitalize(formatDateToRussian(date, "dd"));
+        String dayFrom = formatDateToRussian(date, "dd");
         try {
             getMatchingTableDate(monthFrom, dayFrom).click();
         } catch (ElementClickInterceptedException e) {
@@ -91,25 +100,24 @@ public class TravelYandexHotelPage extends AbstractPage {
     }
 
     public String getFirstHotelName() {
-        String hotelName =  getElement("//div[@class='PTAbI']//div[@class='TdBzS root_size_s latzZ']/..//a")
-                .getText();
+        String hotelName = getElement(FIRST_HOTEL_XPATH).getText();
         return hotelName.substring(0, hotelName.length() - 3);
     }
 
     private WebElement getMatchingListElement(String name) {
-        By elementWithNameLocator = By.xpath("//*[@class='EW8x1']//div[text()='" + name + "']");
+        By elementWithNameLocator = By.xpath(String.format(TRAVEL_LIST_NAME_XPATH, name));
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.elementToBeClickable(elementWithNameLocator));
     }
 
     private WebElement getMatchingTableDate(String month, String day) {
-        By dateLocator = By.xpath("//div[@class='aCtN8']//div[text()='" + month + "']/..//span[text()='" + day + "']");
+        By dateLocator = By.xpath(String.format(TRAVEL_TABLE_DATE_XPATH, month, day));
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.elementToBeClickable(dateLocator));
     }
 
-    private WebElement getElement(String xpath) {
-        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-    }
+//    private WebElement getElement(String xpath) {
+//        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
+//                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+//    }
 }

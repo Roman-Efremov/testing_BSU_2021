@@ -6,8 +6,8 @@ import page.TravelYandexFavoritesPage;
 import page.TravelYandexHotelPage;
 import service.TripDataCreator;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class TravelYandexHotelPageTest extends CommonConditions {
 
@@ -22,10 +22,9 @@ public class TravelYandexHotelPageTest extends CommonConditions {
                 .submit()
                 .addFirstHotelToFavorite();
         String hotelName = hotelPage.getFirstHotelName();
-        boolean favoritesPage = new TravelYandexFavoritesPage(driver)
-                .containsHotel(hotelName);
+        boolean isFavoritesPageContainsHotel = new TravelYandexFavoritesPage(driver).containsHotel(hotelName);
 
-        assertTrue(favoritesPage, "hotel \"" + hotelName + "\" wasn't add to favorites");
+        assertThat(isFavoritesPageContainsHotel, equalTo(true));
     }
 
     @Test
@@ -37,6 +36,6 @@ public class TravelYandexHotelPageTest extends CommonConditions {
                 .enterDateTo(tripData.getDateTo())
                 .isDateFromClickable(tripData.getDateFrom());
 
-        assertFalse(isDateFromEmpty, "date from is not empty");
+        assertThat(isDateFromEmpty, equalTo(false));
     }
 }

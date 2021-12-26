@@ -6,7 +6,8 @@ import page.TravelYandexAviaPage;
 import service.TripDataCreator;
 
 import static org.apache.commons.lang3.StringUtils.chop;
-import static org.testng.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static utils.DateUtils.formatDateToRussian;
 
 public class TravelYandexAviaPageTest extends CommonConditions {
@@ -21,10 +22,10 @@ public class TravelYandexAviaPageTest extends CommonConditions {
         String sourceAndDestination = aviaPage.getSourceAndDestination();
         String dates = aviaPage.getTravelDate();
 
-        assertTrue(sourceAndDestination.contains(tripData.getSource())
-                && sourceAndDestination.contains(tripData.getDestination())
-                && dates.contains(chop(formatDateToRussian(tripData.getDateFrom(), "dd MMM")))
-                && dates.contains(chop(formatDateToRussian(tripData.getDateTo(), "dd MMM"))));
+        assertThat(sourceAndDestination, containsString(tripData.getSource()));
+        assertThat(sourceAndDestination, containsString(tripData.getDestination()));
+        assertThat(dates, containsString(chop(formatDateToRussian(tripData.getDateFrom(), "dd MMM"))));
+        assertThat(dates, containsString(chop(formatDateToRussian(tripData.getDateTo(), "dd MMM"))));
     }
 
     @Test
@@ -36,6 +37,6 @@ public class TravelYandexAviaPageTest extends CommonConditions {
                 .enterDateTo(tripData.getDateTo())
                 .isDateFromEmpty();
 
-       assertTrue(isDateFromEmpty, "date from is not empty");
+        assertThat(isDateFromEmpty, equalTo(true));
     }
 }

@@ -1,8 +1,6 @@
 package page;
 
 import model.TripData;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -21,19 +19,29 @@ public class TravelYandexAviaPage extends AbstractPage {
 
     public static String PAGE_URL = "https://travel.yandex.ru/avia/";
 
-    @FindBy(xpath = "//div[@class='root KPSVc']/form//div[text()='Откуда']/..//input")
+    private static final String SOURCE_AND_DESTINATION_XPATH = "//header//div[@class='WFYfN']/span[@class='text']";
+    private static final String TRAVEL_DATE_XPATH = "//header//div[@class='kzvZe']/span[@class='ZlSD1']";
+    private static final String TRAVEL_LIST_NAME_XPATH = "//*[@class='EW8x1']//div[text() = '%1$s']";
+    private static final String TRAVEL_TABLE_DATE_XPATH = "//div[@class='aCtN8']//div[text()='%1$s']/..//span[text()='%2$s']";
+    private static final String SOURCE_INPUT_XPATH = "//div[@class='root KPSVc']/form//div[text()='Откуда']/..//input";
+    private static final String DESTINATION_INPUT_XPATH = "//div[@class='root KPSVc']/form//div[text()='Куда']/..//input";
+    private static final String DATE_TO_XPATH = "//div[@class='root KPSVc']/form//div[text()='Туда']";
+    private static final String DATE_FROM_XPATH = "//div[@class='root KPSVc']/form//div[@class='nAZcZ SGaYr' and text()='Обратно']";
+    private static final String FIND_BUTTON_XPATH = "//div[@class='root KPSVc']/form/button[@class='vHqxX z8gtM']";
+
+    @FindBy(xpath = SOURCE_INPUT_XPATH)
     private WebElement sourceInput;
 
-    @FindBy(xpath = "//div[@class='root KPSVc']/form//div[text()='Куда']/..//input")
+    @FindBy(xpath = DESTINATION_INPUT_XPATH)
     private WebElement destinationInput;
 
-    @FindBy(xpath = "//div[@class='root KPSVc']/form//div[text()='Туда']")
+    @FindBy(xpath = DATE_TO_XPATH)
     private WebElement dateTo;
 
-    @FindBy(xpath = "//div[@class='root KPSVc']/form//div[text()='Обратно']")
+    @FindBy(xpath = DATE_FROM_XPATH)
     private WebElement dateFrom;
 
-    @FindBy(xpath = "//div[@class='root KPSVc']/form/button[@class='vHqxX z8gtM']")
+    @FindBy(xpath = FIND_BUTTON_XPATH)
     private WebElement findButton;
 
     public TravelYandexAviaPage(WebDriver driver) {
@@ -90,31 +98,31 @@ public class TravelYandexAviaPage extends AbstractPage {
     }
 
     public String getSourceAndDestination() {
-        return getElement("//header//div[@class='WFYfN']/span[@class='text']").getText();
+        return getElement(SOURCE_AND_DESTINATION_XPATH).getText();
     }
 
     public String getTravelDate() {
-        return getElement("//header//div[@class='kzvZe']/span[@class='ZlSD1']").getText();
+        return getElement(TRAVEL_DATE_XPATH).getText();
     }
 
     public boolean isDateFromEmpty() {
-        return getElement("//div[@class='root KPSVc']/form//div[@class='nAZcZ SGaYr' and text()='Обратно']").isDisplayed();
+        return getElement(DATE_FROM_XPATH).isDisplayed();
     }
 
     private WebElement getMatchingListElement(String name) {
-        By elementWithNameLocator = By.xpath("//*[@class='EW8x1']//div[text() = '" + name + "']");
+        By elementWithNameLocator = By.xpath(String.format(TRAVEL_LIST_NAME_XPATH, name));
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.elementToBeClickable(elementWithNameLocator));
     }
 
     private WebElement getMatchingTableDate(String month, String day) {
-        By dateLocator = By.xpath("//div[@class='aCtN8']//div[text()='" + month + "']/..//span[text()='" + day + "']");
+        By dateLocator = By.xpath(String.format(TRAVEL_TABLE_DATE_XPATH, month, day));
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.elementToBeClickable(dateLocator));
     }
 
-    private WebElement getElement(String xpath) {
-        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-    }
+//    private WebElement getElement(String xpath) {
+//        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
+//                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+//    }
 }
