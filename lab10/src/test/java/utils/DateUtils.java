@@ -24,9 +24,4 @@ public class DateUtils {
         calendar.add(Calendar.DAY_OF_YEAR, numberOfDays);
         return calendar.getTime();
     }
-
-    public static void main(String[] args) {
-        Date d = getCurrentDate();
-        System.out.println(chop(formatDateToRussian(d, "dd MMM")));
-    }
 }
